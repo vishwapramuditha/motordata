@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "F1 Drivers Schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      },
+      "name": {
+        "type": "string"
+      },
+      "code": {
+        "type": "string",
+        "pattern": "^[A-Z]{3}$"
+      },
+      "nationality": {
+        "type": "string"
+      },
+      "dateOfBirth": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    "required": ["id", "name", "code", "nationality", "dateOfBirth"],
+    "additionalProperties": false
+  }
+}

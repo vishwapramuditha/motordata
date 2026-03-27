@@ -1,0 +1,18 @@
+[
+  {
+    "id": "alex-palou",
+    "name": "Alex Palou",
+    "number": 10,
+    "team": "Chip Ganassi Racing",
+    "engine": "Honda",
+    "nationality": "Spanish"
+  },
+  {
+    "id": "josef-newgarden",
+    "name": "Josef Newgarden",
+    "number": 2,
+    "team": "Team Penske",
+    "engine": "Chevrolet",
+    "nationality": "American"
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "max-verstappen",
+    "name": "Max Verstappen",
+    "code": "VER",
+    "nationality": "Dutch",
+    "dateOfBirth": "1997-09-30"
+  },
+  {
+    "id": "lewis-hamilton",
+    "name": "Lewis Hamilton",
+    "code": "HAM",
+    "nationality": "British",
+    "dateOfBirth": "1985-01-07"
+  },
+  {
+    "id": "charles-leclerc",
+    "name": "Charles Leclerc",
+    "code": "LEC",
+    "nationality": "Monegasque",
+    "dateOfBirth": "1997-10-16"
+  }
+]

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MotorData</title>
+    <!-- Modern typography matching OpenF1 (Inter or similar sans-serif) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['ui-monospace', 'monospace'] },
+                    colors: {
+                        brand: {
+                            sidebar: '#1c2125',
+                            content: '#ffffff',
+                            bg: '#121415',
+                            card: '#181b1d',
+                            border: '#2a2e31',
+                            red: '#b91c1c',
+                            redHover: '#991b1b',
+                            textMuted: '#9ca3af'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #121415; color: #ffffff; font-family: 'Inter', sans-serif; overflow: hidden; margin: 0; }
+        
+        /* Sidebar Styles */
+        .sidebar { background-color: #1c2125; border-right: 1px solid #2a2e31; height: calc(100vh - 64px); overflow-y: auto; }
+        .series-accordion { border-bottom: 1px solid #2a2e31; }
+        .series-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: #f3f4f6; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; transition: background 0.2s; }
+        .series-header:hover { background-color: rgba(255,255,255,0.02); }
+        .series-content { display: none; padding: 10px 0; background-color: #181b1d; }
+        .series-accordion.active .series-content { display: block; }
+        .series-accordion.active .series-header i { transform: rotate(180deg); transition: transform 0.2s; }
+        
+        .file-item { padding: 8px 20px 8px 40px; font-size: 0.85rem; color: #9ca3af; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: color 0.2s, background 0.2s; }
+        .file-item:hover { color: white; background-color: rgba(255,255,255,0.05); }
+        .file-item.active { color: #b91c1c; font-weight: 500; background-color: rgba(185, 28, 28, 0.1); border-left: 2px solid #b91c1c; }
+        
+        .create-btn { padding: 8px 20px 8px 40px; font-size: 0.8rem; color: #10b981; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .create-btn:hover { color: #34d399; background-color: rgba(16, 185, 129, 0.05); }
+
+        /* JSON Editor Custom Overrides for Brand Dark Mode */
+        .je-object__container, .je-array__container { border: 1px solid #2a2e31; padding: 15px; border-radius: 8px; margin-bottom: 15px; background: #121415; }
+        .je-indented-panel { padding-left: 15px; border-left: 2px solid #2a2e31; }
+        label { color: #d1d5db !important; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; display: inline-block; text-transform: capitalize; }
+        input[type="text"], input[type="number"], select {
+            background-color: #181b1d !important; border: 1px solid #3f454a !important; color: #ffffff !important;
+            border-radius: 6px; padding: 8px 12px; width: 100%; margin-top: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus { outline: none; border-color: #b91c1c !important; }
+        button.json-editor-btn {
+            background-color: #272c30; color: white; border: 1px solid #3f454a; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-top: 8px; margin-right: 4px; font-weight: 500; transition: background 0.2s;
+        }
+        button.json-editor-btn:hover { background-color: #3f454a; }
+        button.json-editor-btn-delete { background-color: #7f1d1d; border-color: #991b1b; }
+        button.json-editor-btn-delete:hover { background-color: #991b1b; }
+        .row { margin-bottom: 16px; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #121415; }
+        ::-webkit-scrollbar-thumb { background: #3f454a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #b91c1c; }
+    </style>
+</head>
+<body class="flex flex-col">
+
+    <!-- Top Navigation -->
+    <nav class="h-16 flex border-b border-brand-border bg-brand-sidebar z-50 shrink-0 items-center justify-between px-6">
+        <a href="/" class="font-bold text-xl tracking-tight text-white gap-1 flex items-center">
+            MotorData<span class="text-brand-red">Admin</span>
+        </a>
+        <button id="btnPush" class="bg-brand-red hover:bg-brand-redHover px-4 py-2 text-sm rounded-md font-medium transition-colors flex items-center gap-2 text-white">
+            <i class="fa-brands fa-github"></i>
+            Push to GitHub
+        </button>
+    </nav>
+
+    <!-- Main Workspace -->
+    <div class="flex flex-grow overflow-hidden bg-brand-bg">
+        
+        <!-- Left Sidebar: File Tree -->
+        <div class="sidebar w-[280px] shrink-0 flex flex-col pt-2" id="sidebarContainer">
+            <div class="text-center p-8 text-brand-textMuted"><i class="fa-solid fa-spinner fa-spin"></i> Loading hierarchy...</div>
+        </div>
+
+        <!-- Middle Content Window -->
+        <main class="flex-grow flex flex-col relative overflow-hidden bg-[#16191b]">
+            
+            <!-- Editor Top Bar -->
+            <div id="editorHeader" class="hidden h-14 border-b border-brand-border bg-brand-card flex items-center justify-between px-6 shrink-0 shadow-sm z-10">
+                <div class="flex items-center gap-3">
+                    <span id="currentEditingIcon" class="text-brand-red"><i class="fa-solid fa-file-code"></i></span>
+                    <span id="currentEditingPath" class="text-white font-mono text-sm font-semibold tracking-wide">no-file-selected</span>
+                </div>
+                <button id="btnSaveData" class="bg-[#10b981] hover:bg-[#059669] text-white px-4 py-1.5 rounded text-sm font-semibold transition-colors flex items-center gap-2 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                    <i class="fa-solid fa-floppy-disk"></i> Save File
+                </button>
+            </div>
+
+            <!-- New File Config Bar (hidden by default) -->
+            <div id="newFileConfig" class="hidden flex-col gap-4 p-6 bg-brand-card border-b border-brand-border shrink-0">
+                <h3 class="text-white font-semibold text-lg flex items-center gap-2"><i class="fa-solid fa-folder-plus text-brand-red"></i> Create New Data</h3>
+                <div class="flex gap-4 items-end">
+                    <div class="flex-1">
+                        <label class="text-brand-textMuted text-xs uppercase font-bold mb-1 block">1. File Path (e.g. 2026/brazil_qualifying.json)</label>
+                        <div class="flex">
+                            <span id="newFilePrefix" class="bg-[#272c30] border border-brand-border border-r-0 rounded-l px-3 py-2 text-brand-textMuted font-mono text-sm flex items-center">f1/</span>
+                            <input type="text" id="newFilePath" class="flex-1 bg-brand-bg border border-brand-border rounded-r px-3 py-2 text-white font-mono text-sm" placeholder="2027/testing.json">
+                        </div>
+                    </div>
+                    <div class="w-64">
+                        <label class="text-brand-textMuted text-xs uppercase font-bold mb-1 block">2. Select Schema Template</label>
+                        <select id="newFileSchema" class="bg-brand-bg border border-brand-border rounded px-3 py-2 text-white font-mono text-sm w-full outline-none focus:border-brand-red">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <button id="btnInitNew" class="bg-white text-black hover:bg-gray-200 px-6 py-2 rounded text-sm font-bold transition-colors">
+                        Generate Form <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Actual Form Container -->
+            <div id="editorContainer" class="hidden flex-grow overflow-y-auto p-6 lg:p-10 custom-scrollbar">
+                <div id="jsonEditor" class="max-w-5xl mx-auto"></div>
+            </div>
+
+            <!-- Welcome Screen -->
+            <div id="welcomeMessage" class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-brand-bg z-0">
+                <div class="w-20 h-20 rounded-full bg-brand-card border border-brand-border flex items-center justify-center mb-6 shadow-xl">
+                    <i class="fa-solid fa-sitemap text-3xl text-brand-textMuted"></i>
+                </div>
+                <h2 class="text-3xl text-white font-bold mb-2 tracking-tight">Select a Series to begin</h2>
+                <p class="text-brand-textMuted max-w-md">Browse existing filesystem structures or seamlessly generate massive deeply-nested JSON payloads based on your schemas.</p>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 translate-y-24 opacity-0 transition-all duration-300 bg-brand-card border border-brand-border p-4 rounded-lg shadow-2xl z-50 flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-green-500 text-xl"></i>
+        <span id="toastMsg" class="font-medium text-white text-sm">Success!</span>
+    </div>
+
+    <script>
+        let editor = null;
+        let globalStructure = {};
+        let currentSeries = '';
+        let currentFilePath = ''; // f1/2026/results.json
+        let currentSchemaName = ''; 
+
+        // Toast Helper
+        const showToast = (msg, isError = false) => {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            document.getElementById('toastIcon').className = isError 
+                ? 'fa-solid fa-circle-xmark text-red-500 text-xl' 
+                : 'fa-solid fa-circle-check text-green-500 text-xl';
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-24', 'opacity-0'), 4000);
+        };
+
+        // 1. Fetch entire workspace structure
+        async function fetchStructure() {
+            try {
+                const res = await fetch('/api/structure');
+                globalStructure = await res.json();
+                renderSidebar();
+            } catch (err) {
+                document.getElementById('sidebarContainer').innerHTML = `<p class="text-red-400 p-4">Error loading API.</p>`;
+            }
+        }
+
+        // 2. Render Sidebar Navigation (Accordion style sport-by-sport)
+        function renderSidebar() {
+            const container = document.getElementById('sidebarContainer');
+            container.innerHTML = '';
+
+            Object.keys(globalStructure).sort().forEach(series => {
+                const acData = globalStructure[series];
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'series-accordion';
+                
+                // Header
+                const header = document.createElement('div');
+                header.className = 'series-header';
+                header.innerHTML = `<span><i class="fa-solid fa-layer-group text-brand-textMuted mr-2"></i> ${series}</span> <i class="fa-solid fa-chevron-down text-brand-textMuted text-xs"></i>`;
+                
+                // Content
+                const content = document.createElement('div');
+                content.className = 'series-content';
+
+                // File Tree (Existing files)
+                if (acData.files && acData.files.length > 0) {
+                    acData.files.sort().forEach(file => {
+                        const fileBtn = document.createElement('div');
+                        fileBtn.className = 'file-item';
+                        // Keep just the filename or nested path cleanly
+                        const displayName = file.length > 25 ? '...' + file.substring(file.length - 25) : file;
+                        fileBtn.innerHTML = `<i class="fa-solid fa-file-lines"></i> ${displayName}`;
+                        fileBtn.onclick = () => loadExistingFile(series, file);
+                        content.appendChild(fileBtn);
+                    });
+                }
+
+                // Create New Button
+                const newBtn = document.createElement('div');
+                newBtn.className = 'create-btn';
+                newBtn.innerHTML = `<i class="fa-solid fa-plus"></i> New Folder/File`;
+                newBtn.onclick = () => promptNewFile(series);
+                content.appendChild(newBtn);
+
+                // Accordion Toggle Logic
+                header.onclick = () => {
+                    // Close others
+                    document.querySelectorAll('.series-accordion').forEach(el => {
+                        if (el !== wrapper) el.classList.remove('active');
+                    });
+                    wrapper.classList.toggle('active');
+                };
+
+                wrapper.appendChild(header);
+                wrapper.appendChild(content);
+                container.appendChild(wrapper);
+            });
+        }
+
+        // 3. UI Flow: Prompt to create a new nested file
+        function promptNewFile(series) {
+            currentSeries = series;
+            document.getElementById('welcomeMessage').classList.add('hidden');
+            document.getElementById('editorContainer').classList.add('hidden');
+            document.getElementById('editorHeader').classList.add('hidden');
+            document.getElementById('newFileConfig').classList.remove('hidden');
+            document.getElementById('newFileConfig').classList.add('flex');
+
+            document.getElementById('newFilePrefix').innerText = `${series}/`;
+            document.getElementById('newFilePath').value = '';
+            
+            // Populate Schemas dropdown
+            const schemaSelect = document.getElementById('newFileSchema');
+            schemaSelect.innerHTML = '';
+            const schemas = globalStructure[series].schemas || [];
+            schemas.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.innerText = s;
+                schemaSelect.appendChild(opt);
+            });
+        }
+
+        // 4. UI Flow: Generated new json editor
+        document.getElementById('btnInitNew').onclick = async () => {
+            const series = currentSeries;
+            const pathSuffix = document.getElementById('newFilePath').value.trim();
+            if (!pathSuffix) return showToast('Filename requires a value', true);
+            if (!pathSuffix.endsWith('.json')) return showToast('Filename must end with .json', true);
+            
+            const schemaName = document.getElementById('newFileSchema').value;
+            currentFilePath = `${series}/${pathSuffix}`;
+            
+            document.getElementById('newFileConfig').classList.add('hidden');
+            document.getElementById('newFileConfig').classList.remove('flex');
+            
+            await instantiateEditor(series, schemaName, { _isNew: true });
+        };
+
+        // 5. UI Flow: Load existing file
+        async function loadExistingFile(series, relativePath) {
+            currentSeries = series;
+            currentFilePath = `${series}/${relativePath}`;
+            
+            // Detect schema based on exact filename match (e.g. results.json -> results.schema.json)
+            // Or default to the first available schema for that series
+            let schemaName = '';
+            const schemas = globalStructure[series].schemas || [];
+            if (schemas.length === 0) return showToast('No schemas exist for this series!', true);
+            
+            // Try intelligent match: filename base matches schema name
+            const baseFile = relativePath.split('/').pop().replace('.json', '');
+            if (schemas.includes(baseFile)) {
+                schemaName = baseFile;
+            } else {
+                schemaName = schemas[0]; // fallback
+            }
+
+            // Fetch actual file data
+            try {
+                const res = await fetch(`/api/data?file=${encodeURIComponent(currentFilePath)}`);
+                const fileData = await res.json();
+                
+                document.getElementById('newFileConfig').classList.add('hidden');
+                document.getElementById('newFileConfig').classList.remove('flex');
+                
+                await instantiateEditor(series, schemaName, fileData);
+            } catch (err) {
+                showToast('Failed to load file content from disk', true);
+            }
+        }
+
+        // Core Editor Setup Routine
+        async function instantiateEditor(series, schemaName, data) {
+            currentSchemaName = schemaName;
+            document.getElementById('welcomeMessage').classList.add('hidden');
+            
+            // Setup Header
+            document.getElementById('editorHeader').classList.remove('hidden');
+            document.getElementById('currentEditingPath').innerText = currentFilePath;
+            
+            // Fetch raw schema
+            let schemaObj;
+            try {
+                const res = await fetch(`/api/schemas/${series}/${schemaName}`);
+                schemaObj = await res.json();
+            } catch (err) {
+                return showToast('Failed to fetch raw schema file', true);
+            }
+
+            // Init JSON Editor
+            const container = document.getElementById('jsonEditor');
+            container.innerHTML = '';
+            if (editor) editor.destroy();
+
+            document.getElementById('editorContainer').classList.remove('hidden');
+
+            editor = new JSONEditor(container, {
+                schema: schemaObj,
+                theme: 'html',
+                iconlib: 'fontawesome5',
+                disable_edit_json: true,
+                disable_properties: true,
+                disable_collapse: true,
+                prompt_before_delete: false
+            });
+
+            if (data && !data._isNew) {
+                editor.setValue(data);
+                showToast('Loaded local file successfully.');
+            } else {
+                showToast('Started fresh blank form.');
+            }
+        }
+
+        // Save Data Listener
+        document.getElementById('btnSaveData').onclick = async () => {
+            const errors = editor.validate();
+            if (errors.length) {
+                showToast('Validation Error! Form missing required fields.', true);
+                return;
+            }
+            
+            const content = editor.getValue();
+
+            const btn = document.getElementById('btnSaveData');
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+
+            try {
+                const res = await fetch('/api/data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ file: currentFilePath, content })
+                });
+                
+                if (res.ok) {
+                    showToast('File deeply saved successfully!');
+                    await fetchStructure(); // Refresh to catch new files in sidebar
+                } else {
+                    const err = await res.json();
+                    showToast(err.error || 'Failed to save', true);
+                }
+            } catch (err) {
+                showToast('Network error saving file', true);
+            }
+            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Save File`;
+        };
+
+        // Push to GitHub Listener
+        document.getElementById('btnPush').onclick = async () => {
+            const btn = document.getElementById('btnPush');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Pushing...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/git/push', { method: 'POST', body: JSON.stringify({ message: 'Update JSON data from MotorData Admin Dashboard' }), headers: {'Content-Type': 'application/json'} });
+                const json = await res.json();
+                
+                if (json.success) showToast(json.message);
+                else showToast('Push Failed: ' + json.error, true);
+            } catch (err) {
+                showToast('Failed to contact server', true);
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+        };
+
+        // Bootstrap App
+        fetchStructure();
+    </script>
+</body>
+</html>

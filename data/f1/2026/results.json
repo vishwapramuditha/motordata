@@ -1,0 +1,32 @@
+{
+  "raceId": "2026-bahrain-grand-prix",
+  "season": 2026,
+  "round": 1,
+  "circuit": "bahrain",
+  "results": [
+    {
+      "position": 1,
+      "driverId": "max-verstappen",
+      "points": 25.5,
+      "laps": 57,
+      "time": "1:31:44.742",
+      "status": "Finished"
+    },
+    {
+      "position": 2,
+      "driverId": "charles-leclerc",
+      "points": 18,
+      "laps": 57,
+      "time": "+11.987",
+      "status": "Finished"
+    },
+    {
+      "position": 3,
+      "driverId": "lewis-hamilton",
+      "points": 15,
+      "laps": 57,
+      "time": "+38.637",
+      "status": "Finished"
+    }
+  ]
+}

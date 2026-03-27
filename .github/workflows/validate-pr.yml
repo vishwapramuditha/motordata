@@ -1,0 +1,44 @@
+name: Validate JSON Data
+
+on:
+  pull_request:
+    paths:
+      - 'data/**/*.json'
+      - 'schemas/**/*.json'
+    branches:
+      - main
+      - master
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install AJV CLI
+        run: npm install -g ajv-cli ajv-formats
+
+      - name: Validate All Series JSON Data
+        run: |
+          for schema in $(find schemas -type f -name "*.schema.json"); do
+            series=$(basename $(dirname "$schema"))
+            schema_name=$(basename "$schema" .schema.json)
+            
+            echo "::group::Validating $series -> $schema_name"
+            
+            if [ -d "data/$series" ]; then
+              find "data/$series" -type f -name "$schema_name.json" | while read -r data_file; do
+                echo "Testing $data_file against $schema"
+                ajv validate -s "$schema" -d "$data_file" -c ajv-formats || exit 1
+              done
+            fi
+            
+            echo "::endgroup::"
+          done

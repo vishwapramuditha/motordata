@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - MotorData API</title>
+    <!-- Professional Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['ui-monospace', 'monospace']
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#2563eb',
+                            sidebarBg: '#f8fafc',
+                            contentBg: '#ffffff',
+                            codeBg: '#0f172a',
+                            border: '#e2e8f0',
+                            textDark: '#0f172a',
+                            textMuted: '#64748b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+
+        .sidebar {
+            background-color: #f8fafc;
+            color: #0f172a;
+            width: 280px;
+            overflow-y: auto;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .sidebar-title {
+            padding: 24px 24px 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar-link {
+            padding: 8px 24px;
+            display: block;
+            color: #475569;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-left: 2px solid transparent;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .sidebar-link:hover {
+            color: #2563eb;
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        .sidebar-link.active {
+            background-color: rgba(37, 99, 235, 0.08);
+            color: #2563eb;
+            border-left-color: #2563eb;
+            font-weight: 600;
+        }
+
+        .content-pane {
+            background-color: #ffffff;
+            color: #334155;
+            overflow-y: auto;
+            padding: 60px 80px;
+        }
+
+        /* Light mode headings and text */
+        .content-pane h2 {
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 1.875rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .content-pane h3 {
+            color: #0f172a;
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-pane p {
+            color: #475569;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .code-pane {
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .code-tabs {
+            display: flex;
+            background-color: #020617;
+            padding-left: 24px;
+        }
+
+        .code-tab {
+            padding: 14px 24px;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: #94a3b8;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .code-tab.active {
+            color: white;
+            border-bottom-color: white;
+            background-color: #0f172a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 14px 16px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: 600;
+            color: #0f172a;
+            background-color: #f8fafc;
+        }
+
+        td {
+            color: #475569;
+        }
+
+        /* Code highlight matching VS Code dark */
+        .token-string {
+            color: #ce9178;
+        }
+
+        .token-num {
+            color: #b5cea8;
+        }
+
+        .token-key {
+            color: #9cdcfe;
+        }
+
+        .token-keyword {
+            color: #569cd6;
+        }
+
+        .token-func {
+            color: #dcdcaa;
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+
+<body class="h-screen flex flex-col">
+
+    <!-- Top Navbar Minimal Light -->
+    <div class="h-16 flex bg-white z-50 shrink-0 border-b border-brand-border">
+        <div class="w-[280px] flex items-center px-6 border-r border-brand-border shrink-0 bg-brand-sidebarBg">
+            <a href="index.html"
+                class="font-bold text-lg tracking-tight text-brand-textDark gap-1 flex items-center hover:text-brand-blue transition-colors">
+                <svg class="w-4 h-4 text-brand-blue mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg> Home
+            </a>
+        </div>
+        <div class="flex-grow bg-white flex items-center px-8 border-r border-brand-border">
+            <h1 class="text-xl font-bold text-brand-textDark" id="headerTitle">MotorData Documentation</h1>
+        </div>
+        <div class="w-[45%] bg-[#020617] flex items-end">
+            <div class="code-tabs w-full">
+                <div class="code-tab active">javascript</div>
+                <div class="code-tab">python</div>
+                <div class="code-tab">shell</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Triple Pane Layout -->
+    <div class="flex flex-grow overflow-hidden">
+
+        <!-- Light Sidebar Navigation -->
+        <div class="sidebar shrink-0 flex flex-col justify-between py-4">
+            <div>
+                <a href="#intro" class="sidebar-link active" onclick="loadContent('intro')">Introduction</a>
+                <a href="#auth" class="sidebar-link" onclick="loadContent('auth')">Authentication</a>
+
+                <div class="sidebar-title">F1 Data</div>
+                <a href="#f1-drivers" class="sidebar-link" onclick="loadContent('f1-drivers')">Drivers List</a>
+                <a href="#f1-results" class="sidebar-link" onclick="loadContent('f1-results')">Session Results</a>
+
+                <div class="sidebar-title">MotoGP Data</div>
+                <a href="#motogp-riders" class="sidebar-link" onclick="loadContent('motogp-riders')">Riders
+                    Directory</a>
+
+                <div class="sidebar-title">WRC Data</div>
+                <a href="#wrc-drivers" class="sidebar-link" onclick="loadContent('wrc-drivers')">Rally Drivers</a>
+
+                <div class="sidebar-title">IndyCar Data</div>
+                <a href="#indycar-drivers" class="sidebar-link" onclick="loadContent('indycar-drivers')">Active
+                    Roster</a>
+            </div>
+        </div>
+
+        <!-- Middle Content Center -->
+        <div class="content-pane flex-grow" id="mainContent">
+            <!-- Dynamically populated -->
+        </div>
+
+        <!-- Right Code Terminal Dark Mode -->
+        <div class="code-pane w-[45%] shrink-0" id="codeContent">
+            <!-- Dynamically populated -->
+        </div>
+    </div>
+
+    <!-- JavaScript Router Logic -->
+    <script>
+        const docsData = {
+            'intro': {
+                title: 'MotorData Overview',
+                html: `
+                    <h2>Getting Started</h2>
+                    <p>
+                        MotorData is a robust, open-source JSON API serving historical and live telemetry data across the world's premier motorsport categories including F1, MotoGP, WRC, and IndyCar.
+                    </p>
+                    <div class="bg-gray-50 border border-gray-200 p-5 rounded-lg mb-8">
+                        <h3 class="font-bold text-gray-900 m-0 text-sm mb-2 uppercase tracking-wide">Public Base URL</h3>
+                        <p class="font-mono text-brand-blue m-0">https://vishwapramuditha.github.io/motordata/</p>
+                    </div>
+                    <p>
+                        Select an endpoint from the left navigation sidebar to view exactly how to construct your queries, understand what attributes each payload contains, and review copy-pasteable script examples.
+                    </p>
+                `,
+                code: `
+                    <div class="p-8">
+                        <p class="text-gray-500 text-sm font-mono mb-6">// API Reference. Select an endpoint on the left.</p>
+                        <pre class="font-mono text-sm leading-relaxed text-gray-300">console.log("Ready to fetch MotorData!");</pre>
+                    </div>
+                `
+            },
+            'auth': {
+                title: 'Authentication Info',
+                html: `
+                    <h2>Zero Auth Required</h2>
+                    <p>
+                        The public endpoints of MotorData strictly do <strong>not</strong> require an API Key, Bearer Token, or any Authorization Headers. You can instantly execute a GET request securely from any frontend application.
+                    </p>
+                `,
+                code: `
+                    <div class="p-8">
+                        <p class="text-gray-500 font-mono text-sm mb-4">// Direct GET requests accepted</p>
+                        <pre class="font-mono text-sm text-gray-300"><span class="token-keyword">const</span> res = <span class="token-keyword">await</span> <span class="token-func">fetch</span>(<span class="token-string">"url..."</span>);</pre>
+                    </div>
+                `
+            },
+            'f1-drivers': {
+                title: 'Formula 1 Endpoints',
+                html: `
+                    <h2>F1 Drivers Register</h2>
+                    <p>Retrieve a complete array of currently active Formula 1 drivers, including their official timing acronyms and nationalities.</p>
+                    
+                    <h3>HTTP Request</h3>
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 font-mono text-sm text-gray-800">
+                        <span class="text-brand-blue font-bold mr-3 py-1 px-2 bg-blue-100 rounded">GET</span> <span>.../data/f1/drivers.json</span>
+                    </div>
+
+                    <h3>JSON Attributes Schema</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Property</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="font-mono text-sm font-semibold">id</td><td>The unique string identifier assigned to an F1 driver (e.g. max-verstappen).</td></tr>
+                            <tr><td class="font-mono text-sm font-semibold">name</td><td>Full official driver name.</td></tr>
+                            <tr><td class="font-mono text-sm font-semibold">code</td><td>The three-letter timing screen acronym (e.g., VER).</td></tr>
+                            <tr><td class="font-mono text-sm font-semibold">nationality</td><td>Country racing under for FIA superlicense purposes.</td></tr>
+                        </tbody>
+                    </table>
+                `,
+                code: `
+                    <div class="p-8 border-b border-gray-800">
+                        <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/drivers.json"</span>;
+
+<span class="token-func">fetch</span>(url)
+  .<span class="token-func">then</span>(res => res.json())
+  .<span class="token-func">then</span>(data => console.log(data));</pre>
+                    </div>
+                    <div class="p-8 bg-[#020617] flex-grow">
+                        <div class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">Terminal Output</div>
+                        <pre class="font-mono text-sm leading-relaxed text-gray-300">[
+  {
+    <span class="token-key">"id"</span>: <span class="token-string">"max-verstappen"</span>,
+    <span class="token-key">"name"</span>: <span class="token-string">"Max Verstappen"</span>,
+    <span class="token-key">"code"</span>: <span class="token-string">"VER"</span>,
+    <span class="token-key">"nationality"</span>: <span class="token-string">"Dutch"</span>
+  }
+]</pre>
+                    </div>
+                `
+            },
+            'motogp-riders': {
+                title: 'MotoGP Endpoints',
+                html: `
+                    <h2>MotoGP Elite Riders</h2>
+                    <p>Fetch all active riders in the premier MotoGP class globally, including their assigned bike number and manufacturer.</p>
+                    
+                    <h3>HTTP Request</h3>
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 font-mono text-sm text-gray-800">
+                        <span class="text-brand-blue font-bold mr-3 py-1 px-2 bg-blue-100 rounded">GET</span> <span>.../data/motogp/riders.json</span>
+                    </div>
+
+                    <h3>JSON Attributes Schema</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Property</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="font-mono text-sm font-semibold">id</td><td>Rider unique URL slug formatting.</td></tr>
+                            <tr><td class="font-mono text-sm font-semibold">number</td><td>Integer representing bike number (e.g. 1).</td></tr>
+                            <tr><td class="font-mono text-sm font-semibold">team</td><td>Current team contracting association.</td></tr>
+                            <tr><td class="font-mono text-sm font-semibold">bike</td><td>Motorcycle Manufacturer chassis (Ducati, Yamaha, Honda).</td></tr>
+                        </tbody>
+                    </table>
+                `,
+                code: `
+                   <div class="p-8 border-b border-gray-800">
+                        <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/motogp/riders.json"</span>;
+
+<span class="token-func">fetch</span>(url)
+  .<span class="token-func">then</span>(res => res.json())
+  .<span class="token-func">then</span>(data => console.log(data));</pre>
+                    </div>
+                    <div class="p-8 bg-[#020617] flex-grow">
+                        <div class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">Terminal Output</div>
+                        <pre class="font-mono text-sm leading-relaxed text-gray-300">[
+  {
+    <span class="token-key">"id"</span>: <span class="token-string">"francesco-bagnaia"</span>,
+    <span class="token-key">"name"</span>: <span class="token-string">"Francesco Bagnaia"</span>,
+    <span class="token-key">"number"</span>: <span class="token-num">1</span>,
+    <span class="token-key">"bike"</span>: <span class="token-string">"Ducati"</span>
+  }
+]</pre>
+                    </div>
+                `
+            }
+        };
+
+        const defaultData = {
+            html: `<h2>Documentation Section Pending</h2><p>Select "Drivers List" under F1 or MotoGP to see fully styled documentation mockups representing the live JSON data structures.</p>`,
+            code: `<div class="p-8"><pre class="text-gray-500 text-sm font-mono">// Code blocks populate here...</pre></div>`,
+            title: 'API Document'
+        };
+
+        function loadContent(key) {
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            const clicked = document.querySelector(`.sidebar-link[onclick="loadContent('${key}')"]`);
+            if(clicked) clicked.classList.add('active');
+
+            const data = docsData[key] || defaultData;
+            document.getElementById('headerTitle').innerText = data.title;
+            
+            const mainEl = document.getElementById('mainContent');
+            const codeEl = document.getElementById('codeContent');
+            
+            mainEl.style.opacity = 0;
+            codeEl.style.opacity = 0;
+            
+            setTimeout(() => {
+                mainEl.innerHTML = data.html;
+                codeEl.innerHTML = data.code;
+                mainEl.style.opacity = 1;
+                codeEl.style.opacity = 1;
+                mainEl.style.transition = 'opacity 0.2s';
+                codeEl.style.transition = 'opacity 0.2s';
+            }, 100);
+        }
+
+        loadContent('intro');
+
+    </script>
+</body>
+
+</html>

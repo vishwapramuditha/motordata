@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "F1 Race Results Schema",
+  "type": "object",
+  "properties": {
+    "raceId": {
+        "type": "string"
+    },
+    "season": {
+      "type": "integer"
+    },
+    "round": {
+      "type": "integer"
+    },
+    "circuit": {
+      "type": "string"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "driverId": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "points": {
+            "type": "number",
+            "minimum": 0
+          },
+          "laps": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "time": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["position", "driverId", "points", "laps", "status"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["raceId", "season", "round", "circuit", "results"],
+  "additionalProperties": false
+}

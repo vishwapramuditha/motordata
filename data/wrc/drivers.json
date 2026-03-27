@@ -1,0 +1,18 @@
+[
+  {
+    "id": "kalle-rovampera",
+    "name": "Kalle Rovanperä",
+    "coDriver": "Jonne Halttunen",
+    "team": "Toyota Gazoo Racing WRT",
+    "car": "Toyota GR Yaris Rally1",
+    "nationality": "Finnish"
+  },
+  {
+    "id": "thierry-neuville",
+    "name": "Thierry Neuville",
+    "coDriver": "Martijn Wydaeghe",
+    "team": "Hyundai Shell Mobis WRT",
+    "car": "Hyundai i20 N Rally1",
+    "nationality": "Belgian"
+  }
+]

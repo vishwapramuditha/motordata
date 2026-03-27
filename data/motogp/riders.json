@@ -1,0 +1,26 @@
+[
+  {
+    "id": "francesco-bagnaia",
+    "name": "Francesco Bagnaia",
+    "number": 1,
+    "team": "Ducati Lenovo Team",
+    "bike": "Ducati",
+    "nationality": "Italian"
+  },
+  {
+    "id": "jorge-martin",
+    "name": "Jorge Martin",
+    "number": 89,
+    "team": "Prima Pramac Racing",
+    "bike": "Ducati",
+    "nationality": "Spanish"
+  },
+  {
+    "id": "fabio-quartararo",
+    "name": "Fabio Quartararo",
+    "number": 20,
+    "team": "Monster Energy Yamaha MotoGP",
+    "bike": "Yamaha",
+    "nationality": "French"
+  }
+]

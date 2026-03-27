@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MotoGP Riders Schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      },
+      "name": {
+        "type": "string"
+      },
+      "number": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 99
+      },
+      "team": {
+        "type": "string"
+      },
+      "bike": {
+        "type": "string",
+        "enum": ["Ducati", "Yamaha", "KTM", "Aprilia", "Honda"]
+      },
+      "nationality": {
+        "type": "string"
+      }
+    },
+    "required": ["id", "name", "number", "team", "bike", "nationality"],
+    "additionalProperties": false
+  }
+}

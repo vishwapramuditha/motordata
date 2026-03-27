@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WRC Drivers Schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      },
+      "name": {
+        "type": "string"
+      },
+      "coDriver": {
+        "type": "string"
+      },
+      "team": {
+        "type": "string"
+      },
+      "car": {
+        "type": "string",
+        "enum": ["Toyota GR Yaris Rally1", "Hyundai i20 N Rally1", "Ford Puma Rally1"]
+      },
+      "nationality": {
+        "type": "string"
+      }
+    },
+    "required": ["id", "name", "coDriver", "team", "car", "nationality"],
+    "additionalProperties": false
+  }
+}
