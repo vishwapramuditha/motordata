@@ -1,0 +1,34 @@
+﻿[
+    {
+        "name":  "Set up job",
+        "conclusion":  "success"
+    },
+    {
+        "name":  "Checkout Repository",
+        "conclusion":  "success"
+    },
+    {
+        "name":  "Setup Pages",
+        "conclusion":  "failure"
+    },
+    {
+        "name":  "Prepare Built Content",
+        "conclusion":  "skipped"
+    },
+    {
+        "name":  "Upload Artifact",
+        "conclusion":  "skipped"
+    },
+    {
+        "name":  "Deploy to GitHub Pages",
+        "conclusion":  "skipped"
+    },
+    {
+        "name":  "Post Checkout Repository",
+        "conclusion":  "success"
+    },
+    {
+        "name":  "Complete job",
+        "conclusion":  "success"
+    }
+]
