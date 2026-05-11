@@ -1,0 +1,27 @@
+{
+  "rallyId": "2026-monte-carlo",
+  "season": 2026,
+  "stageNumber": 1,
+  "stageName": "Thoard - Sisteron",
+  "distanceKm": 21.01,
+  "results": [
+    {
+      "position": 1,
+      "driverId": "kalle-rovanpera",
+      "stageTime": "12:34.5",
+      "overallTime": "12:34.5"
+    },
+    {
+      "position": 2,
+      "driverId": "thierry-neuville",
+      "stageTime": "12:37.1",
+      "overallTime": "12:37.1"
+    },
+    {
+      "position": 3,
+      "driverId": "elfyn-evans",
+      "stageTime": "12:40.0",
+      "overallTime": "12:40.0"
+    }
+  ]
+}

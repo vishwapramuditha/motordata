@@ -1,0 +1,25 @@
+{
+  "raceId": "2026-portuguese-gp",
+  "season": 2026,
+  "circuit": "portimao",
+  "results": [
+    {
+      "position": 1,
+      "riderId": "francesco-bagnaia",
+      "bike": "Ducati",
+      "time": "41:25.123"
+    },
+    {
+      "position": 2,
+      "riderId": "jorge-martin",
+      "bike": "Ducati",
+      "time": "+1.234"
+    },
+    {
+      "position": 3,
+      "riderId": "brad-binder",
+      "bike": "KTM",
+      "time": "+3.456"
+    }
+  ]
+}

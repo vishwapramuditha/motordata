@@ -1,0 +1,24 @@
+{
+  "season": 2026,
+  "round": 1,
+  "standings": [
+    {
+      "position": 1,
+      "driverId": "alex-palou",
+      "points": 50,
+      "wins": 1
+    },
+    {
+      "position": 2,
+      "driverId": "pato-oward",
+      "points": 40,
+      "wins": 0
+    },
+    {
+      "position": 3,
+      "driverId": "josef-newgarden",
+      "points": 35,
+      "wins": 0
+    }
+  ]
+}
