@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IndyCar Standings Schema",
+  "type": "object",
+  "properties": {
+    "season": {
+      "type": "integer"
+    },
+    "round": {
+      "type": "integer"
+    },
+    "standings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "driverId": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "points": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "wins": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": ["position", "driverId", "points", "wins"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["season", "round", "standings"],
+  "additionalProperties": false
+}

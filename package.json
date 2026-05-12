@@ -1,0 +1,23 @@
+{
+  "name": "motordata",
+  "version": "1.0.0",
+  "description": "The open source API for Motorsport data",
+  "main": "index.js",
+  "exports": "./index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "validate": "bash -c 'for schema in $(find schemas -type f -name \"*.schema.json\"); do series=$(basename $(dirname \"$schema\")); schema_name=$(basename \"$schema\" .schema.json); if [ -d \"data/$series\" ]; then find \"data/$series\" -type f -name \"$schema_name.json\" | while read -r data_file; do ajv validate -s \"$schema\" -d \"$data_file\" -c ajv-formats || exit 1; done; fi; done'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishwapramuditha/motordata.git"
+  },
+  "author": "vishwapramuditha",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^2.1.1"
+  }
+}

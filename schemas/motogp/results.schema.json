@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MotoGP Race Results Schema",
+  "type": "object",
+  "properties": {
+    "raceId": {
+      "type": "string"
+    },
+    "season": {
+      "type": "integer"
+    },
+    "circuit": {
+      "type": "string"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "riderId": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "bike": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          }
+        },
+        "required": ["position", "riderId", "bike", "time"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["raceId", "season", "circuit", "results"],
+  "additionalProperties": false
+}
