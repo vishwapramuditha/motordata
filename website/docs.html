@@ -230,9 +230,9 @@
         </div>
         <div class="w-[45%] bg-[#020617] flex items-end">
             <div class="code-tabs w-full">
-                <div class="code-tab active">javascript</div>
-                <div class="code-tab">python</div>
-                <div class="code-tab">shell</div>
+                <div class="code-tab active" onclick="switchTab(\'javascript\')">javascript</div>
+                <div class="code-tab" onclick="switchTab(\'python\')">python</div>
+                <div class="code-tab" onclick="switchTab(\'shell\')">shell</div>
             </div>
         </div>
     </div>
@@ -275,8 +275,11 @@
         </div>
     </div>
 
-    <!-- JavaScript Router Logic -->
+        <!-- JavaScript Router Logic -->
     <script>
+        let currentTab = 'javascript';
+        let currentContentKey = 'intro';
+
         const docsData = {
             'intro': {
                 title: 'MotorData Overview',
@@ -293,12 +296,26 @@
                         Select an endpoint from the left navigation sidebar to view exactly how to construct your queries, understand what attributes each payload contains, and review copy-pasteable script examples.
                     </p>
                 `,
-                code: `
-                    <div class="p-8">
-                        <p class="text-gray-500 text-sm font-mono mb-6">// API Reference. Select an endpoint on the left.</p>
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300">console.log("Ready to fetch MotorData!");</pre>
-                    </div>
-                `
+                code: {
+                    javascript: `
+                        <div class="p-8">
+                            <p class="text-gray-500 text-sm font-mono mb-6">// API Reference. Select an endpoint on the left.</p>
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300">console.log("Ready to fetch MotorData!");</pre>
+                        </div>
+                    `,
+                    python: `
+                        <div class="p-8">
+                            <p class="text-gray-500 text-sm font-mono mb-6"># API Reference. Select an endpoint on the left.</p>
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300">print("Ready to fetch MotorData!")</pre>
+                        </div>
+                    `,
+                    shell: `
+                        <div class="p-8">
+                            <p class="text-gray-500 text-sm font-mono mb-6"># API Reference. Select an endpoint on the left.</p>
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300">echo "Ready to fetch MotorData!"</pre>
+                        </div>
+                    `
+                }
             },
             'auth': {
                 title: 'Authentication Info',
@@ -308,12 +325,27 @@
                         The public endpoints of MotorData strictly do <strong>not</strong> require an API Key, Bearer Token, or any Authorization Headers. You can instantly execute a GET request securely from any frontend application.
                     </p>
                 `,
-                code: `
-                    <div class="p-8">
-                        <p class="text-gray-500 font-mono text-sm mb-4">// Direct GET requests accepted</p>
-                        <pre class="font-mono text-sm text-gray-300"><span class="token-keyword">const</span> res = <span class="token-keyword">await</span> <span class="token-func">fetch</span>(<span class="token-string">"url..."</span>);</pre>
-                    </div>
-                `
+                code: {
+                    javascript: `
+                        <div class="p-8">
+                            <p class="text-gray-500 font-mono text-sm mb-4">// Direct GET requests accepted</p>
+                            <pre class="font-mono text-sm text-gray-300"><span class="token-keyword">const</span> res = <span class="token-keyword">await</span> <span class="token-func">fetch</span>(<span class="token-string">"url..."</span>);</pre>
+                        </div>
+                    `,
+                    python: `
+                        <div class="p-8">
+                            <p class="text-gray-500 font-mono text-sm mb-4"># Direct GET requests accepted</p>
+                            <pre class="font-mono text-sm text-gray-300"><span class="token-keyword">import</span> requests
+res = requests.<span class="token-func">get</span>(<span class="token-string">"url..."</span>)</pre>
+                        </div>
+                    `,
+                    shell: `
+                        <div class="p-8">
+                            <p class="text-gray-500 font-mono text-sm mb-4"># Direct GET requests accepted</p>
+                            <pre class="font-mono text-sm text-gray-300">curl <span class="token-string">"url..."</span></pre>
+                        </div>
+                    `
+                }
             },
             'sdk': {
                 title: 'NPM SDK',
@@ -327,19 +359,36 @@
                         <p class="font-mono text-brand-blue m-0">npm install github:vishwapramuditha/motordata</p>
                     </div>
                 `,
-                code: `
-                    <div class="p-8">
-                        <p class="text-gray-500 font-mono text-sm mb-4">// Import and use the SDK</p>
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> motordata = <span class="token-func">require</span>(<span class="token-string">'motordata'</span>);
-
+                code: {
+                    javascript: `
+                        <div class="p-8">
+                            <p class="text-gray-500 font-mono text-sm mb-4">// Import and use the SDK</p>
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> motordata = <span class="token-func">require</span>(<span class="token-string">'motordata'</span>);
+    
 <span class="token-keyword">async function</span> <span class="token-func">getF1Drivers</span>() {
   <span class="token-keyword">const</span> drivers = <span class="token-keyword">await</span> motordata.f1.<span class="token-func">getDrivers</span>();
   console.log(drivers);
 }
-
+    
 <span class="token-func">getF1Drivers</span>();</pre>
-                    </div>
-                `
+                        </div>
+                    `,
+                    python: `
+                        <div class="p-8">
+                            <p class="text-gray-500 font-mono text-sm mb-4"># SDK is JS-only. Use requests.</p>
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">import</span> requests
+<span class="token-keyword">def</span> <span class="token-func">get_f1_drivers</span>():
+    res = requests.get(<span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/drivers.json"</span>)
+    print(res.json())</pre>
+                        </div>
+                    `,
+                    shell: `
+                        <div class="p-8">
+                            <p class="text-gray-500 font-mono text-sm mb-4"># SDK is JS-only. Use curl.</p>
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300">curl -s <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/drivers.json"</span> | jq</pre>
+                        </div>
+                    `
+                }
             },
             'f1-drivers': {
                 title: 'Formula 1 Endpoints',
@@ -351,85 +400,61 @@
                     <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 font-mono text-sm text-gray-800">
                         <span class="text-brand-blue font-bold mr-3 py-1 px-2 bg-blue-100 rounded">GET</span> <span>.../data/f1/drivers.json</span>
                     </div>
-
-                    <h3>JSON Attributes Schema</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Property</th><th>Description</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td class="font-mono text-sm font-semibold">id</td><td>The unique string identifier assigned to an F1 driver (e.g. max-verstappen).</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">name</td><td>Full official driver name.</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">code</td><td>The three-letter timing screen acronym (e.g., VER).</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">nationality</td><td>Country racing under for FIA superlicense purposes.</td></tr>
-                        </tbody>
-                    </table>
                 `,
-                code: `
-                    <div class="p-8 border-b border-gray-800">
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/drivers.json"</span>;
-
-<span class="token-func">fetch</span>(url)
-  .<span class="token-func">then</span>(res => res.json())
-  .<span class="token-func">then</span>(data => console.log(data));</pre>
-                    </div>
-                    <div class="p-8 bg-[#020617] flex-grow">
-                        <div class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">Terminal Output</div>
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300">[
-  {
-    <span class="token-key">"id"</span>: <span class="token-string">"max-verstappen"</span>,
-    <span class="token-key">"name"</span>: <span class="token-string">"Max Verstappen"</span>,
-    <span class="token-key">"code"</span>: <span class="token-string">"VER"</span>,
-    <span class="token-key">"nationality"</span>: <span class="token-string">"Dutch"</span>
-  }
-]</pre>
-                    </div>
-                `
+                code: {
+                    javascript: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/drivers.json"</span>;
+fetch(url).then(res => res.json()).then(console.log);</pre>
+                        </div>
+                    `,
+                    python: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">import</span> requests
+url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/drivers.json"</span>
+data = requests.get(url).json()
+print(data)</pre>
+                        </div>
+                    `,
+                    shell: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300">curl -s <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/drivers.json"</span> | jq</pre>
+                        </div>
+                    `
+                }
             },
             'motogp-riders': {
                 title: 'MotoGP Endpoints',
                 html: `
                     <h2>MotoGP Elite Riders</h2>
-                    <p>Fetch all active riders in the premier MotoGP class globally, including their assigned bike number and manufacturer.</p>
+                    <p>Fetch all active riders in the premier MotoGP class globally.</p>
                     
                     <h3>HTTP Request</h3>
                     <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 font-mono text-sm text-gray-800">
                         <span class="text-brand-blue font-bold mr-3 py-1 px-2 bg-blue-100 rounded">GET</span> <span>.../data/motogp/riders.json</span>
                     </div>
-
-                    <h3>JSON Attributes Schema</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Property</th><th>Description</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td class="font-mono text-sm font-semibold">id</td><td>Rider unique URL slug formatting.</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">number</td><td>Integer representing bike number (e.g. 1).</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">team</td><td>Current team contracting association.</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">bike</td><td>Motorcycle Manufacturer chassis (Ducati, Yamaha, Honda).</td></tr>
-                        </tbody>
-                    </table>
                 `,
-                code: `
-                   <div class="p-8 border-b border-gray-800">
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/motogp/riders.json"</span>;
-
-<span class="token-func">fetch</span>(url)
-  .<span class="token-func">then</span>(res => res.json())
-  .<span class="token-func">then</span>(data => console.log(data));</pre>
-                    </div>
-                    <div class="p-8 bg-[#020617] flex-grow">
-                        <div class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">Terminal Output</div>
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300">[
-  {
-    <span class="token-key">"id"</span>: <span class="token-string">"francesco-bagnaia"</span>,
-    <span class="token-key">"name"</span>: <span class="token-string">"Francesco Bagnaia"</span>,
-    <span class="token-key">"number"</span>: <span class="token-num">1</span>,
-    <span class="token-key">"bike"</span>: <span class="token-string">"Ducati"</span>
-  }
-]</pre>
-                    </div>
-                `
+                code: {
+                    javascript: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/motogp/riders.json"</span>;
+fetch(url).then(res => res.json()).then(console.log);</pre>
+                        </div>
+                    `,
+                    python: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">import</span> requests
+url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/motogp/riders.json"</span>
+data = requests.get(url).json()
+print(data)</pre>
+                        </div>
+                    `,
+                    shell: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300">curl -s <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/motogp/riders.json"</span> | jq</pre>
+                        </div>
+                    `
+                }
             },
             'f1-results': {
                 title: 'F1 Results',
@@ -441,41 +466,28 @@
                     <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 font-mono text-sm text-gray-800">
                         <span class="text-brand-blue font-bold mr-3 py-1 px-2 bg-blue-100 rounded">GET</span> <span>.../data/f1/2026/results.json</span>
                     </div>
-
-                    <h3>JSON Attributes Schema</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Property</th><th>Description</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td class="font-mono text-sm font-semibold">raceId</td><td>Unique identifier for the race event.</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">season</td><td>The championship year.</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">results</td><td>Array of driver classification objects.</td></tr>
-                        </tbody>
-                    </table>
                 `,
-                code: `
-                    <div class="p-8 border-b border-gray-800">
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/2026/results.json"</span>;
-
-<span class="token-func">fetch</span>(url)
-  .<span class="token-func">then</span>(res => res.json())
-  .<span class="token-func">then</span>(data => console.log(data));</pre>
-                    </div>
-                    <div class="p-8 bg-[#020617] flex-grow">
-                        <div class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">Terminal Output</div>
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300">{
-  <span class="token-key">"raceId"</span>: <span class="token-string">"2026-bahrain-grand-prix"</span>,
-  <span class="token-key">"season"</span>: <span class="token-num">2026</span>,
-  <span class="token-key">"results"</span>: [
-    {
-      <span class="token-key">"position"</span>: <span class="token-num">1</span>,
-      <span class="token-key">"driverId"</span>: <span class="token-string">"max-verstappen"</span>
-    }
-  ]
-}</pre>
-                    </div>
-                `
+                code: {
+                    javascript: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/2026/results.json"</span>;
+fetch(url).then(res => res.json()).then(console.log);</pre>
+                        </div>
+                    `,
+                    python: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">import</span> requests
+url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/2026/results.json"</span>
+data = requests.get(url).json()
+print(data)</pre>
+                        </div>
+                    `,
+                    shell: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300">curl -s <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/f1/2026/results.json"</span> | jq</pre>
+                        </div>
+                    `
+                }
             },
             'wrc-drivers': {
                 title: 'WRC Rally Drivers',
@@ -487,38 +499,28 @@
                     <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 font-mono text-sm text-gray-800">
                         <span class="text-brand-blue font-bold mr-3 py-1 px-2 bg-blue-100 rounded">GET</span> <span>.../data/wrc/drivers.json</span>
                     </div>
-
-                    <h3>JSON Attributes Schema</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Property</th><th>Description</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td class="font-mono text-sm font-semibold">id</td><td>Driver unique URL slug formatting.</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">name</td><td>Full driver name.</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">team</td><td>Rally team association.</td></tr>
-                        </tbody>
-                    </table>
                 `,
-                code: `
-                   <div class="p-8 border-b border-gray-800">
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/wrc/drivers.json"</span>;
-
-<span class="token-func">fetch</span>(url)
-  .<span class="token-func">then</span>(res => res.json())
-  .<span class="token-func">then</span>(data => console.log(data));</pre>
-                    </div>
-                    <div class="p-8 bg-[#020617] flex-grow">
-                        <div class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">Terminal Output</div>
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300">[
-  {
-    <span class="token-key">"id"</span>: <span class="token-string">"kalle-rovanpera"</span>,
-    <span class="token-key">"name"</span>: <span class="token-string">"Kalle Rovanperä"</span>,
-    <span class="token-key">"team"</span>: <span class="token-string">"Toyota Gazoo Racing"</span>
-  }
-]</pre>
-                    </div>
-                `
+                code: {
+                    javascript: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/wrc/drivers.json"</span>;
+fetch(url).then(res => res.json()).then(console.log);</pre>
+                        </div>
+                    `,
+                    python: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">import</span> requests
+url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/wrc/drivers.json"</span>
+data = requests.get(url).json()
+print(data)</pre>
+                        </div>
+                    `,
+                    shell: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300">curl -s <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/wrc/drivers.json"</span> | jq</pre>
+                        </div>
+                    `
+                }
             },
             'indycar-drivers': {
                 title: 'IndyCar Roster',
@@ -530,48 +532,73 @@
                     <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 font-mono text-sm text-gray-800">
                         <span class="text-brand-blue font-bold mr-3 py-1 px-2 bg-blue-100 rounded">GET</span> <span>.../data/indycar/drivers.json</span>
                     </div>
-
-                    <h3>JSON Attributes Schema</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Property</th><th>Description</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td class="font-mono text-sm font-semibold">id</td><td>Driver unique identifier.</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">name</td><td>Full driver name.</td></tr>
-                            <tr><td class="font-mono text-sm font-semibold">carNumber</td><td>The assigned chassis number.</td></tr>
-                        </tbody>
-                    </table>
                 `,
-                code: `
-                   <div class="p-8 border-b border-gray-800">
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/indycar/drivers.json"</span>;
-
-<span class="token-func">fetch</span>(url)
-  .<span class="token-func">then</span>(res => res.json())
-  .<span class="token-func">then</span>(data => console.log(data));</pre>
-                    </div>
-                    <div class="p-8 bg-[#020617] flex-grow">
-                        <div class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">Terminal Output</div>
-                        <pre class="font-mono text-sm leading-relaxed text-gray-300">[
-  {
-    <span class="token-key">"id"</span>: <span class="token-string">"alex-palou"</span>,
-    <span class="token-key">"name"</span>: <span class="token-string">"Alex Palou"</span>,
-    <span class="token-key">"carNumber"</span>: <span class="token-num">10</span>
-  }
-]</pre>
-                    </div>
-                `
+                code: {
+                    javascript: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">const</span> url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/indycar/drivers.json"</span>;
+fetch(url).then(res => res.json()).then(console.log);</pre>
+                        </div>
+                    `,
+                    python: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300"><span class="token-keyword">import</span> requests
+url = <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/indycar/drivers.json"</span>
+data = requests.get(url).json()
+print(data)</pre>
+                        </div>
+                    `,
+                    shell: `
+                        <div class="p-8 border-b border-gray-800">
+                            <pre class="font-mono text-sm leading-relaxed text-gray-300">curl -s <span class="token-string">"https://vishwapramuditha.github.io/motordata/data/indycar/drivers.json"</span> | jq</pre>
+                        </div>
+                    `
+                }
             }
         };
 
         const defaultData = {
-            html: `<h2>Documentation Section Pending</h2><p>Select "Drivers List" under F1 or MotoGP to see fully styled documentation mockups representing the live JSON data structures.</p>`,
-            code: `<div class="p-8"><pre class="text-gray-500 text-sm font-mono">// Code blocks populate here...</pre></div>`,
+            html: `<h2>Documentation Section Pending</h2>`,
+            code: { javascript: '', python: '', shell: '' },
             title: 'API Document'
         };
 
+        function switchTab(lang) {
+            currentTab = lang;
+            document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.code-tab').forEach(t => {
+                if (t.innerText === lang) t.classList.add('active');
+            });
+            renderCode();
+        }
+
+        function renderCode() {
+            const data = docsData[currentContentKey] || defaultData;
+            const codeEl = document.getElementById('codeContent');
+            
+            // Output template for specific endpoints to show terminal output visually
+            const terminalOutput = `
+                <div class="p-8 bg-[#020617] flex-grow">
+                    <div class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">Terminal Output</div>
+                    <pre class="font-mono text-sm leading-relaxed text-gray-300">[ { "id": "example", "name": "Data fetched successfully!" } ]</pre>
+                </div>
+            `;
+
+            let codeHtml = data.code[currentTab] || '';
+            // Append terminal block only to endpoints that actually fetch data
+            if (['f1-drivers', 'motogp-riders', 'f1-results', 'wrc-drivers', 'indycar-drivers'].includes(currentContentKey)) {
+                codeHtml += terminalOutput;
+            }
+
+            codeEl.style.opacity = 0;
+            setTimeout(() => {
+                codeEl.innerHTML = codeHtml;
+                codeEl.style.opacity = 1;
+            }, 100);
+        }
+
         function loadContent(key) {
+            currentContentKey = key;
             document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
             const clicked = document.querySelector(`.sidebar-link[onclick="loadContent('${key}')"]`);
             if(clicked) clicked.classList.add('active');
@@ -580,18 +607,12 @@
             document.getElementById('headerTitle').innerText = data.title;
             
             const mainEl = document.getElementById('mainContent');
-            const codeEl = document.getElementById('codeContent');
-            
             mainEl.style.opacity = 0;
-            codeEl.style.opacity = 0;
             
             setTimeout(() => {
                 mainEl.innerHTML = data.html;
-                codeEl.innerHTML = data.code;
                 mainEl.style.opacity = 1;
-                codeEl.style.opacity = 1;
-                mainEl.style.transition = 'opacity 0.2s';
-                codeEl.style.transition = 'opacity 0.2s';
+                renderCode(); // render code based on currentTab
             }, 100);
         }
 

@@ -1,0 +1,55 @@
+name: Automated Data Scraper
+
+on:
+  # 1. Run automatically on a schedule (Cron Job)
+  # This cron expression means: Run at 08:00 AM UTC every Monday
+  schedule:
+    - cron: '0 8 * * 1'
+
+  # 2. Allow manual triggering from the GitHub Actions dashboard
+  workflow_dispatch:
+
+# Give the Action permission to push code back to the repository
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install Scraper Dependencies
+        run: npm install
+
+      - name: 🕷️ Run F1 Scraper
+        run: node scrapers/f1_results.js
+
+      - name: 💾 Commit and Push Updates
+        run: |
+          # Configure Git to act as the GitHub Actions Bot
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # Stage all modified data files
+          git add data/
+          
+          # Check if there are any changes. If not, exit successfully without committing.
+          if git diff --staged --quiet; then
+            echo "No new data to commit. Exiting."
+            exit 0
+          fi
+          
+          # Commit the changes
+          git commit -m "🤖 Auto-update motorsport data"
+          
+          # Push back to the main branch
+          git push

@@ -132,6 +132,77 @@
             </div>
         </section>
 
+        <!-- Integration Section -->
+        <section class="py-24 border-b border-brand-border bg-brand-bg">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-6 text-brand-textDark">Integrate in seconds</h2>
+                        <p class="text-brand-textMuted text-lg mb-8 leading-relaxed">
+                            Stop parsing CSVs and scraping Wikipedia. MotorData provides a beautiful, zero-dependency Node.js SDK and a lightning-fast HTTP API so you can focus on building.
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-blue-50 text-brand-blue flex items-center justify-center shrink-0 mt-1">
+                                    <span class="font-bold">1</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-bold text-brand-textDark mb-1">Install the package</h4>
+                                    <p class="text-brand-textMuted">Pull the SDK directly into your project.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-blue-50 text-brand-blue flex items-center justify-center shrink-0 mt-1">
+                                    <span class="font-bold">2</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-bold text-brand-textDark mb-1">Import and Fetch</h4>
+                                    <p class="text-brand-textMuted">Use our clean wrapper methods to grab your data.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-blue-50 text-brand-blue flex items-center justify-center shrink-0 mt-1">
+                                    <span class="font-bold">3</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-bold text-brand-textDark mb-1">Build something amazing</h4>
+                                    <p class="text-brand-textMuted">Data is fully typed and structured instantly.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Code Window Mockup -->
+                    <div class="rounded-xl overflow-hidden shadow-2xl bg-[#0f172a] border border-gray-800 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+                        <!-- Window Header -->
+                        <div class="bg-[#1e293b] px-4 py-3 flex items-center gap-2 border-b border-gray-800">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <div class="mx-auto text-xs font-mono text-gray-400">app.js</div>
+                        </div>
+                        
+                        <!-- Terminal Output -->
+                        <div class="p-6 font-mono text-sm leading-relaxed overflow-x-auto text-gray-300">
+                            <div class="mb-6 text-gray-500">
+                                <span class="text-green-400">~/project</span> $ npm install github:vishwapramuditha/motordata<br>
+                                added 1 package in 2s
+                            </div>
+
+                            <p><span class="text-blue-400">const</span> motordata <span class="text-blue-400">=</span> <span class="text-yellow-200">require</span>(<span class="text-green-300">'motordata'</span>);</p>
+                            <br>
+                            <p><span class="text-blue-400">async function</span> <span class="text-yellow-200">getLatestStandings</span>() {</p>
+                            <p class="pl-4"><span class="text-gray-500">// Fetch IndyCar round 1 standings for 2026</span></p>
+                            <p class="pl-4"><span class="text-blue-400">const</span> standings <span class="text-blue-400">=</span> <span class="text-blue-400">await</span> motordata.indycar.<span class="text-yellow-200">getStandings</span>(<span class="text-green-300">'2026'</span>, <span class="text-green-300">'round-1'</span>);</p>
+                            <p class="pl-4"><span class="text-blue-400">console</span>.<span class="text-yellow-200">log</span>(standings);</p>
+                            <p>}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Pricing Section -->
         <section id="pricing" class="py-24 border-b border-brand-border">
             <div class="max-w-5xl mx-auto px-4">

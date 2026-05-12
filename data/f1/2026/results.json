@@ -1,32 +1,26 @@
 {
-  "raceId": "2026-bahrain-grand-prix",
+  "raceId": "latest-championship-standings",
   "season": 2026,
-  "round": 1,
-  "circuit": "bahrain",
   "results": [
     {
       "position": 1,
-      "driverId": "max-verstappen",
-      "points": 25.5,
-      "laps": 57,
-      "time": "1:31:44.742",
-      "status": "Finished"
+      "driverId": "driver-name"
     },
     {
       "position": 2,
-      "driverId": "charles-leclerc",
-      "points": 18,
-      "laps": 57,
-      "time": "+11.987",
-      "status": "Finished"
+      "driverId": "alpine-renault"
     },
     {
       "position": 3,
-      "driverId": "lewis-hamilton",
-      "points": 15,
-      "laps": 57,
-      "time": "+38.637",
-      "status": "Finished"
+      "driverId": "aston-martin-aramco-mercedes"
+    },
+    {
+      "position": 4,
+      "driverId": "ferrari"
+    },
+    {
+      "position": 5,
+      "driverId": "haas-ferrari"
     }
   ]
 }
